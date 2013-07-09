@@ -6,7 +6,6 @@ import com.bh.war.level.entities.FireBurstEntity;
 import com.bh.war.level.entities.Player;
 import com.bh.war.level.entities.projectile.FlameProjectile;
 
-
 public class FireWandItem extends ToolItem {
 
 	public FireWandItem(int level) {

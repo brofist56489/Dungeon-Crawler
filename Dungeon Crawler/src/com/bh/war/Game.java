@@ -1,3 +1,5 @@
+//Comment
+
 package com.bh.war;
 
 import java.awt.Canvas;

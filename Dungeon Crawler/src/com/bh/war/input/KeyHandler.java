@@ -13,6 +13,10 @@ public class KeyHandler implements KeyListener {
 		private boolean clicked;
 		private int absorbs, presses;
 		
+		private Key() {
+			keys.add(this);
+		}
+		
 		public void toggle(boolean press) {
 			if (pressed != press) {
 				pressed = press;

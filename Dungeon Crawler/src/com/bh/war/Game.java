@@ -66,7 +66,7 @@ public class Game extends Canvas implements Runnable {
 		player = new Player(-100, -100, level, keys, mouse);
 		level.addEntity(player);
 		
-		setMenu(new InventoryMenu(this, level, player.inventory));
+		setMenu(null);
 	}
 	
 	public void setMenu(Menu m) {

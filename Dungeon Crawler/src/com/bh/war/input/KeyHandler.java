@@ -13,7 +13,7 @@ public class KeyHandler implements KeyListener {
 		private boolean clicked;
 		private int absorbs, presses;
 		
-		private Key() {
+		public Key() {
 			keys.add(this);
 		}
 		

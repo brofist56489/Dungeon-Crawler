@@ -58,4 +58,8 @@ public class Inventory {
 	public void setItem(int xt, int yt, Item item) {
 		items[xt + yt * width] = item;
 	}
+	
+	public int getW() {
+		return width;
+	}
 }

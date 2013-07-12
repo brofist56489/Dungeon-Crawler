@@ -51,7 +51,7 @@ public class Game extends Canvas implements Runnable {
 	
 	public Player player;
 
-	private void init() {
+	private void init() {		
 		Tile.init();
 		Entity.init();
 		Item.init();
@@ -88,7 +88,7 @@ public class Game extends Canvas implements Runnable {
 			long now = System.nanoTime();
 			d += (now - lt) / nsPt;
 			lt = now;
-			shouldRender = false;
+			shouldRender = true;
 
 			while (d >= 1) {
 				tick();
@@ -163,29 +163,29 @@ public class Game extends Canvas implements Runnable {
 		int w = (int) (health / max_health * 50);
 		int x = WIDTH / 2 - w;
 		
-		screen.renderRect(WIDTH / 2 - 52, 0, 104, 8, 0);
-		screen.renderRect(WIDTH / 2 - 40, 8, 80, 7, 0);
+		screen.renderRect(WIDTH / 2 - 52, 0, 104, 8, 0, false);
+		screen.renderRect(WIDTH / 2 - 40, 8, 80, 7, 0, false);
 		
-		screen.renderRect(x, 2, w * 2, 4, 0xff0000);
+		screen.renderRect(x, 2, w * 2, 4, 0xff0000, false);
 		
 		int mana = player.getMana();
 		float max_mana = player.getMAX_MANA();
 		w = (int) ((mana / max_mana) * 38);
 		x = WIDTH / 2 - w;
-		screen.renderRect(x, 8, w, 4, 0xff);
+		screen.renderRect(x, 8, w, 4, 0xff, false);
 		
 		int stamina = player.getStamina();
 		float max_stamina = player.getMAX_STAMINA();
 		w = (int) ((stamina / max_stamina) * 38);
 		x = WIDTH / 2;
-		screen.renderRect(x, 8, w, 4, 0xff00);
+		screen.renderRect(x, 8, w, 4, 0xff00, false);
 		
 		x = 42;
 		int y = -2;
-		ImageManager.renderFromImage("tileMap", screen, x, y, 14*16, 16);
-		ImageManager.renderFromImage("tileMap", screen, x + 14, y, 14*16 + 1, 16);
-		ImageManager.renderFromImage("tileMap", screen, x, y + 14, 15*16, 16);
-		ImageManager.renderFromImage("tileMap", screen, x + 14, y + 14, 15*16 + 1, 16);
+		ImageManager.renderFromImage("tileMap", screen, x, y, 14*16, 16, false);
+		ImageManager.renderFromImage("tileMap", screen, x + 14, y, 14*16 + 1, 16, false);
+		ImageManager.renderFromImage("tileMap", screen, x, y + 14, 15*16, 16, false);
+		ImageManager.renderFromImage("tileMap", screen, x + 14, y + 14, 15*16 + 1, 16, false);
 		if (player.inventory.getItem(0, 0) != null)
 			player.inventory.getItem(0, 0).render(screen, x + 6, y + 6);
 

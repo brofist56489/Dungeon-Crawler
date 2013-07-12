@@ -28,6 +28,6 @@ public class Item {
 	}
 
 	public void render(Bitmap b, int xx, int yy) {
-		ImageManager.renderFromImage("itemmap", b, xx, yy, textId, 16);
+		ImageManager.renderFromImage("itemmap", b, xx, yy, textId, 16, false);
 	}
 }

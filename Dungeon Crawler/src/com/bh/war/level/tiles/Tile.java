@@ -16,6 +16,8 @@ public class Tile {
 	public static Tile VOID = new Tile(0, false, 0);
 	public static Tile GRASS = new GrassTile(1);
 	public static Tile TREE = new TreeTile(2);
+	public static Tile DUNGEON_WALL = new DungeonWallTile(3);
+	public static Tile DUNGEON_BACK = new DungeonBackTile(4);
 	
 	private final int id;
 	protected final int tileId;

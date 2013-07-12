@@ -20,6 +20,6 @@ public class Mouse {
 	
 	public void render(Screen screen) {
 		getPos();
-		ImageManager.render("mouseTexture", screen, x, y);
+		ImageManager.render("mouseTexture", screen, x, y, false);
 	}
 }

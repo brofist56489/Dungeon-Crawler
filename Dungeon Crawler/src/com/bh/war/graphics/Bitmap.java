@@ -37,12 +37,12 @@ public abstract class Bitmap {
 			pixels[i] = c;
 		}
 	}
-
-	public void render(Bitmap b, int x, int y, int flip) {
-		render(b.pixels, x, y, b.getWidth(), b.getHeight(), flip);
+	
+	public void render(Bitmap b, int x, int y, int flip, boolean light) {
+		render(b.pixels, x, y, b.getWidth(), b.getHeight(), flip, light);
 	}
 
-	public void render(int[] pixs, int xp, int yp, int w, int h, int flip) {
+	public void render(int[] pixs, int xp, int yp, int w, int h, int flip, boolean light) {
 		xp -= xOff;
 		yp -= yOff;
 
@@ -66,7 +66,7 @@ public abstract class Bitmap {
 				if (c == 0x7f007f)
 					continue;
 
-				if (lightingEnabled) {
+				if (lightingEnabled && light) {
 					c = applyLighting(c, x + xp, y + yp);
 				}
 				pixels[(x + xp) + (y + yp) * width] = c;
@@ -107,7 +107,7 @@ public abstract class Bitmap {
 				int c = i.pixels[xs + (ys * i.width) + tileOffset];
 				if (c == 0x7f007f)
 					continue;
-				if (lightingEnabled) {
+				if (lightingEnabled && light) {
 					c = applyLighting(c, x + xp, y + yp);
 				}
 				pixels[(x + xp) + (y + yp) * width] = c;
@@ -133,7 +133,7 @@ public abstract class Bitmap {
 				if (d >= r * r)
 					continue;
 
-				if (lightingEnabled) {
+				if (lightingEnabled && light) {
 					c = applyLighting(c, xx + x, yy + y);
 				}
 
@@ -158,7 +158,7 @@ public abstract class Bitmap {
 					continue;
 
 				int col = c;
-				if (lightingEnabled) {
+				if (lightingEnabled && light) {
 					col = applyLighting(col, xx + x, yy + y);
 				}
 				pixels[(xx+x) + (yy+y) * width] = col;

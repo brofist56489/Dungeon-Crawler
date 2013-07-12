@@ -44,10 +44,10 @@ public class Inventory {
 				int xx = xp + (x + spacing) * 28;
 				int yy = yp + (y + spacing) * 26;
 				
-				ImageManager.renderFromImage("tileMap", b, xx, yy, 14*16, 16);
-				ImageManager.renderFromImage("tileMap", b, xx + 14, yy, 14*16 + 1, 16);
-				ImageManager.renderFromImage("tileMap", b, xx, yy + 14, 15*16, 16);
-				ImageManager.renderFromImage("tileMap", b, xx + 14, yy + 14, 15*16 + 1, 16);
+				ImageManager.renderFromImage("tileMap", b, xx, yy, 14*16, 16, false);
+				ImageManager.renderFromImage("tileMap", b, xx + 14, yy, 14*16 + 1, 16, false);
+				ImageManager.renderFromImage("tileMap", b, xx, yy + 14, 15*16, 16, false);
+				ImageManager.renderFromImage("tileMap", b, xx + 14, yy + 14, 15*16 + 1, 16, false);
 				if(items[x + y * width] != null) {
 					items[x + y * width].render(b, xx + 6, yy + 6);
 				}

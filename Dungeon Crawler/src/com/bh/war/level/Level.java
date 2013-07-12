@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.bh.war.graphics.Bitmap;
 import com.bh.war.level.entities.Entity;
+import com.bh.war.level.generators.DungeonGenerator;
 import com.bh.war.level.tiles.Tile;
 
 public class Level {
@@ -29,6 +30,8 @@ public class Level {
 			tiles[i] = 1 + ((r.nextInt(10) == 0) ? 1 : 0);
 			subTexture[i] = r.nextInt(4);
 		}
+		
+		new DungeonGenerator(this, 0, 0, 15, 15).generate();
 	}
 	
 	public Tile getTile(int x, int y) {

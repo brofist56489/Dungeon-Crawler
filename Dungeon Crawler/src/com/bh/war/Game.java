@@ -94,6 +94,7 @@ public class Game extends Canvas implements Runnable {
 				tick();
 				ticks++;
 				d--;
+				
 				shouldRender = true;
 			}
 			

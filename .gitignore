@@ -1,2 +1,5 @@
 Dungeon Crawler/bin
 *.classpath
+*.DS_Store
+*.project
+*.org.*

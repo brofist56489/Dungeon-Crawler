@@ -1,7 +1,10 @@
 package com.gb.war.level.tiles;
 
+import java.awt.Rectangle;
+
 import com.gb.war.graphics.Bitmap;
 import com.gb.war.graphics.ImageManager;
+import com.gb.war.input.MouseHandler;
 import com.gb.war.level.Level;
 import com.gb.war.level.entities.Player;
 
@@ -20,6 +23,7 @@ public class Tile {
 	public static Tile DUNGEON_WALL = new DungeonWallTile(3);
 	public static Tile DUNGEON_BACK = new DungeonBackTile(4);
 	public static Tile CHEST = new ChestTile(5);
+	public static Tile DOOR = new DoorTile(6);
 	
 	private final int id;
 	protected final int tileId;
@@ -45,8 +49,16 @@ public class Tile {
 		this.tileId = tId;
 	}
 	
-	public boolean interact(Player p, Level l, int x, int y) {
+	public static Tile getTile(int id) {
+		return tiles[id];
+	}
+	
+	public boolean interact(MouseHandler m, Player p, Level l, int x, int y) {
 		return false;
+	}
+	
+	public Rectangle getCollBox(int x, int y, Level l) {
+		return new Rectangle(x << 4, y << 4, 16, 16);
 	}
 	
 	public void render(Bitmap screen, Level l, int x, int y) {

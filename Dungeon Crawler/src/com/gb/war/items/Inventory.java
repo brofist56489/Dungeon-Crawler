@@ -2,6 +2,7 @@ package com.gb.war.items;
 
 import com.gb.war.graphics.Bitmap;
 import com.gb.war.graphics.ImageManager;
+import com.gb.war.items.resources.ResourceItem;
 
 public class Inventory {
 	protected Item[] items;
@@ -30,7 +31,10 @@ public class Inventory {
 			add(i);
 			return;
 		}
-		items[slot] = i;
+		if(items[slot] != null && items[slot] instanceof ResourceItem)
+			((ResourceItem)items[slot]).setCount(((ResourceItem)items[slot]).getCount() + ((ResourceItem)i).getCount());
+		else
+			items[slot] = i;
 	}
 	
 	public Item getItem(int x, int y) {

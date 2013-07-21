@@ -30,14 +30,22 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
 		game.addMouseMotionListener(this);
 	}
 	
+	public void checkHover() {
+		if(Game.instance.menu != null) {
+			Game.instance.menu.onMove(this);
+		}
+	}
+	
 	public void mouseDragged(MouseEvent arg0) {
 		xPos = arg0.getX() * Game.WIDTH / Game.instance.getWidth();
 		yPos = arg0.getY() * Game.HEIGHT / Game.instance.getHeight();
+		checkHover();
 	}
 
 	public void mouseMoved(MouseEvent arg0) {
 		xPos = arg0.getX() * Game.WIDTH / Game.instance.getWidth();
 		yPos = arg0.getY() * Game.HEIGHT / Game.instance.getHeight();
+		checkHover();
 	}
 
 	public void mouseClicked(MouseEvent arg0) {
@@ -46,11 +54,13 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
 	public void mouseEntered(MouseEvent arg0) {
 		xPos = arg0.getX() * Game.WIDTH / Game.instance.getWidth();
 		yPos = arg0.getY() * Game.HEIGHT / Game.instance.getHeight();
+		checkHover();
 	}
 
 	public void mouseExited(MouseEvent arg0) {
 		xPos = arg0.getX() * Game.WIDTH / Game.instance.getWidth();
 		yPos = arg0.getY() * Game.HEIGHT / Game.instance.getHeight();
+		checkHover();
 	}
 	
 	public void tick() {
@@ -76,17 +86,21 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
 			break;
 		case MouseEvent.BUTTON1:
 			leftButton = true;
-			leftPresses += 1;
+			leftPresses += 2;
 			break;
 		case MouseEvent.BUTTON2:
 			middleButton = true;
-			middlePresses += 1;
+			middlePresses += 2;
 			break;
 		case MouseEvent.BUTTON3:
 			rightButton = true;
-			rightPresses += 1;
+			rightPresses += 2;
 			break;
 		}
+
+		tick();
+		if(Game.instance.menu != null)
+			Game.instance.menu.onClick(this);
 	}
 
 	public void mouseReleased(MouseEvent arg0) {
@@ -111,6 +125,14 @@ public class MouseHandler implements MouseListener, MouseMotionListener {
 
 	public int getyPos() {
 		return yPos + Game.instance.screen.yOff;
+	}
+	
+	public int getX() {
+		return xPos;
+	}
+	
+	public int getY() {
+		return yPos;
 	}
 
 	public boolean isLeftButton() {

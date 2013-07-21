@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
@@ -18,7 +19,9 @@ import com.gb.war.graphics.Font;
 import com.gb.war.graphics.ImageManager;
 import com.gb.war.graphics.Screen;
 import com.gb.war.gui.InventoryMenu;
+import com.gb.war.gui.LoadingScreen;
 import com.gb.war.gui.Menu;
+import com.gb.war.gui.PauseMenu;
 import com.gb.war.input.KeyHandler;
 import com.gb.war.input.Mouse;
 import com.gb.war.input.MouseHandler;
@@ -37,7 +40,7 @@ public class Game extends Canvas implements Runnable {
 	public static final String NAME = "Game";
 	public static Game instance;
 
-	JFrame frame;
+	public static JFrame frame;
 	Thread gameThread;
 	boolean running = false;
 	public static int tickCount = 0;
@@ -49,19 +52,22 @@ public class Game extends Canvas implements Runnable {
 	public MouseHandler mouse;
 	private Mouse mouseImage;
 	
+	public boolean fullScreen = false;
+	public boolean shouldFullScreen = false;
+
 	public Menu menu;
-	
+
 	public Level level;
-	
+
 	public Player player;
-	
-	private void init() {	
-//		Sound.calm.play();
+
+	private void init() {
+		// Sound.calm.play();
 		Tile.init();
 		Entity.init();
 		Item.init();
 		Font.init();
-		
+
 		instance = this;
 		keys = new KeyHandler(this);
 		mouse = new MouseHandler(this);
@@ -72,10 +78,10 @@ public class Game extends Canvas implements Runnable {
 		Point pPos = getSafeSpawn();
 		player = new Player(pPos.x, pPos.y, level, keys, mouse);
 		level.addEntity(player);
-		
-		setMenu(null);
+
+		setMenu(new LoadingScreen(this, level));
 	}
-	
+
 	public void setMenu(Menu m) {
 		menu = m;
 	}
@@ -95,7 +101,7 @@ public class Game extends Canvas implements Runnable {
 			long now = System.nanoTime();
 			d += (now - lt) / nsPt;
 			lt = now;
-			shouldRender = false;
+			shouldRender = true;
 
 			while (d >= 1) {
 				tick();
@@ -103,18 +109,18 @@ public class Game extends Canvas implements Runnable {
 				d--;
 				shouldRender = true;
 			}
-			
-			if (shouldRender){
+
+			if (shouldRender) {
 				render();
 				frames++;
 			}
-			
+
 			long cur = System.currentTimeMillis();
 			if (cur - ltr >= 1000) {
 				ltr += 1000;
 				boolean isApp = (Boolean) GlobalVariables.get("isApplet");
-				if(!isApp)
-						frame.setTitle(NAME + " " + ticks + " tps, " + frames + " fps");
+				if (!isApp)
+					frame.setTitle(NAME + " " + ticks + " tps, " + frames + " fps");
 				ticks = frames = 0;
 			}
 		}
@@ -122,19 +128,30 @@ public class Game extends Canvas implements Runnable {
 
 	public void tick() {
 		tickCount++;
-		if(!hasFocus()) {
+		if (!hasFocus()) {
 			keys.releaseAll();
 		}
 		keys.tick();
 		mouse.tick();
-		if(menu != null) {
+		if (menu != null) {
 			menu.tick();
 		} else {
 			level.tick();
-			if(keys.inventory.isClicked()) {
+			if (keys.isKeyPressed(KeyEvent.VK_E)) {
 				InventoryMenu m = new InventoryMenu(this, level);
 				m.addInventory("Player", player.inventory);
 				setMenu(m);
+			}
+			if (keys.isKeyPressed(KeyEvent.VK_ESCAPE)) {
+				setMenu(new PauseMenu(this, level));
+			}
+		}
+		
+		if(shouldFullScreen != fullScreen) {
+			if(shouldFullScreen) {
+				fullScreen();
+			} else {
+				normalScreen();
 			}
 		}
 	}
@@ -142,72 +159,78 @@ public class Game extends Canvas implements Runnable {
 	public void render() {
 		BufferStrategy bs = getBufferStrategy();
 		if (bs == null) {
-			createBufferStrategy(2);
+			try {
+				createBufferStrategy(3);
+			} catch (IllegalStateException e) {
+				System.out.println("Something went wrong here!");
+			}
 			return;
 		}
 		screen.fill(0x9a89a8);
 		screen.clearLighting(255);
-		
-		if(menu != null) {
+
+		if (menu != null) {
 			menu.render(screen);
 		} else {
 			level.applyOffset(player.getX() + player.getW() / 2, player.getY() + player.getH() / 2, screen);
-			
-			if(screen.lightingEnabled) {
+
+			if (screen.lightingEnabled) {
 				level.preRender(screen);
 			}
-			
-			level.renderBackground(screen, (int)player.getX() + player.getW() / 2, (int)player.getY() + player.getH() / 2);
+
+			level.renderBackground(screen, (int) player.getX() + player.getW() / 2, (int) player.getY() + player.getH() / 2);
 			level.renderSprites(screen);
-			
+
 			renderInterface();
 		}
 		mouseImage.render(screen);
 		pixels = screen.setPixels(pixels);
 		Graphics g = bs.getDrawGraphics();
-		int xo = (getWidth() - WIDTH * SCALE) / 2 + 5;
-		int yo = (getHeight() - HEIGHT * SCALE) / 2 + 20;
-		g.drawImage(image, xo, yo, WIDTH * SCALE, HEIGHT * SCALE, null);
+		// int xo = (getWidth() - WIDTH * SCALE) / 2 + 5;
+		// int yo = (getHeight() - HEIGHT * SCALE) / 2 + 20;
+		int xo = 0;
+		int yo = 0;
+		g.drawImage(image, xo, yo, getWidth(), getHeight(), null);
 		g.dispose();
 		bs.show();
 	}
-	
-	public void renderInterface()  {
+
+	public void renderInterface() {
 		screen.clearOffset();
 		int health = player.getHealth();
 		float max_health = player.getMAX_HEALTH();
 		int w = (int) (health / max_health * 50);
 		int x = WIDTH / 2 - w;
-		
+
 		screen.renderRect(WIDTH / 2 - 52, 0, 104, 8, 0, false);
 		screen.renderRect(WIDTH / 2 - 40, 8, 80, 7, 0, false);
-		
+
 		screen.renderRect(x, 2, w * 2, 4, 0xff0000, false);
-		
+
 		int mana = player.getMana();
 		float max_mana = player.getMAX_MANA();
 		w = (int) ((mana / max_mana) * 38);
 		x = WIDTH / 2 - w;
 		screen.renderRect(x, 8, w, 4, 0xff, false);
-		
+
 		int stamina = player.getStamina();
 		float max_stamina = player.getMAX_STAMINA();
 		w = (int) ((stamina / max_stamina) * 38);
 		x = WIDTH / 2;
 		screen.renderRect(x, 8, w, 4, 0xff00, false);
-		
+
 		x = 42;
 		int y = -2;
-		ImageManager.renderFromImage("tileMap", screen, x, y, 14*16, 16, false);
-		ImageManager.renderFromImage("tileMap", screen, x + 14, y, 14*16 + 1, 16, false);
-		ImageManager.renderFromImage("tileMap", screen, x, y + 14, 15*16, 16, false);
-		ImageManager.renderFromImage("tileMap", screen, x + 14, y + 14, 15*16 + 1, 16, false);
+		ImageManager.renderFromImage("tileMap", screen, x, y, 14 * 16, 16, false);
+		ImageManager.renderFromImage("tileMap", screen, x + 14, y, 14 * 16 + 1, 16, false);
+		ImageManager.renderFromImage("tileMap", screen, x, y + 14, 15 * 16, 16, false);
+		ImageManager.renderFromImage("tileMap", screen, x + 14, y + 14, 15 * 16 + 1, 16, false);
 		if (player.inventory.getItem(0, 0) != null)
 			player.inventory.getItem(0, 0).render(screen, x + 6, y + 6);
 
 		level.applyOffset(player.getX() + player.getW() / 2, player.getY() + player.getH() / 2, screen);
 	}
-	
+
 	public synchronized void start() {
 		if (running)
 			return;
@@ -223,32 +246,59 @@ public class Game extends Canvas implements Runnable {
 
 	public static void main(String[] args) {
 		Game game = new Game();
-		game.frame = new JFrame(NAME);
-		game.frame.setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-		game.frame.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
-		game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		try {
-			game.frame.setIconImage(ImageIO.read(Game.class.getResource("/textures/icon2.png")));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		game.frame.setResizable(true);
-		game.frame.setVisible(true);
-		game.frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "null cursor"));
-		game.frame.setLocationRelativeTo(null);
-		game.frame.add(game);
-		game.frame.pack();
+
+		game.normalScreen();
 		
 		GlobalVariables.set("isApplet", false);
 
 		game.start();
 	}
-	
+
+	public void normalScreen() {
+		if(Game.frame != null)
+			Game.frame.dispose();
+		Game.frame = new JFrame(NAME);
+		Game.frame.setMinimumSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+		Game.frame.setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
+		Game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		try {
+			Game.frame.setIconImage(ImageIO.read(Game.class.getResource("/textures/icon2.png")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Game.frame.setResizable(true);
+		Game.frame.setVisible(true);
+		Game.frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "null cursor"));
+		Game.frame.setLocationRelativeTo(null);
+		Game.frame.add(this);
+		Game.frame.pack();
+		fullScreen = false;
+		shouldFullScreen = false;
+	}
+
+	public void fullScreen() {
+		int W = (int) (Toolkit.getDefaultToolkit().getScreenSize()).getWidth();
+		int H = (int) (Toolkit.getDefaultToolkit().getScreenSize()).getHeight();
+		Game.frame.dispose();
+		Game.frame = new JFrame(Game.NAME);
+		Game.frame.setMinimumSize(new Dimension(W, H));
+		Game.frame.setMaximumSize(new Dimension(W, H));
+		Game.frame.setPreferredSize(new Dimension(W, H));
+		Game.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Game.frame.setResizable(false);
+		Game.frame.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB), new Point(0, 0), "null cursor"));
+		Game.frame.setUndecorated(true);
+		Game.frame.setVisible(true);
+		Game.frame.add(this);
+		Game.frame.pack();
+		fullScreen = true;
+		shouldFullScreen = true;
+	}
+
 	/**
-	 * Loops through until a
-	 * safe spawn location for the player is found.
-	 * @return A Point containing a safe spawn location - 
-	 * free from obstruction
+	 * Loops through until a safe spawn location for the player is found.
+	 * 
+	 * @return A Point containing a safe spawn location - free from obstruction
 	 * @author Giant Behemoth
 	 */
 	public Point getSafeSpawn() {
@@ -256,13 +306,14 @@ public class Game extends Canvas implements Runnable {
 		int x = r.nextInt(10);
 		int y = r.nextInt(10);
 		boolean foundX = false;
-		while(foundX == false) {
-			if(level.getTile(x, y) == Tile.CHEST || level.getTile(x, y) == Tile.DUNGEON_WALL || level.getTile(x, y) == Tile.TREE) {
-				System.out.println("Spawn Obstructed By: " + level.getTile(x,  y).getTileId());
+		while (foundX == false) {
+			if (level.getTile(x, y) == Tile.CHEST || level.getTile(x, y) == Tile.DUNGEON_WALL || level.getTile(x, y) == Tile.TREE) {
+				System.out.println("Spawn Obstructed By: " + level.getTile(x, y).getTileId());
 				x = r.nextInt(10);
 				y = r.nextInt(10);
 				System.out.println("Recalculating Spawn...");
-			} else foundX = true;
+			} else
+				foundX = true;
 		}
 		System.out.println(x + ", " + y);
 		return new Point(x * 16, y * 16);

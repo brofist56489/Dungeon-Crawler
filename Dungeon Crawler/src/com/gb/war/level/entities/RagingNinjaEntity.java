@@ -18,6 +18,8 @@ public class RagingNinjaEntity extends Entity {
 	
 	public RagingNinjaEntity(int x, int y, Level l) {
 		super(x, y, l, "ENTITY_RAGING_NINJA");
+		setKindness(EntityKindness.PASSIVE);
+		kindness = EntityKindness.PASSIVE;
 	}
 
 	public void tick() {

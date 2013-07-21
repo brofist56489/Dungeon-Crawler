@@ -1,5 +1,6 @@
 package com.gb.war.gui;
 
+import java.awt.event.KeyEvent;
 import java.util.HashMap;
 
 import com.gb.war.Game;
@@ -9,6 +10,7 @@ import com.gb.war.input.KeyHandler;
 import com.gb.war.input.MouseHandler;
 import com.gb.war.items.Inventory;
 import com.gb.war.items.Item;
+import com.gb.war.items.resources.ResourceItem;
 import com.gb.war.level.Level;
 import com.gb.war.level.entities.Player;
 
@@ -31,13 +33,6 @@ public class InventoryMenu extends Menu {
 		inventories = new HashMap<String, Inventory>();
 	}
 	
-	public InventoryMenu(Menu m) {
-		super(m);
-		mouse = game.mouse;
-		keys = game.keys;
-		inventories = new HashMap<String, Inventory>();
-	}
-	
 	public void addInventory(String name, Inventory i) {
 		if(inventories.isEmpty()) {
 			inventory = i;
@@ -48,7 +43,7 @@ public class InventoryMenu extends Menu {
 	
 	public void tick() {
 		level.tick();
-		if(keys.inventory.isClicked()) {
+		if(keys.isKeyPressed(KeyEvent.VK_E)) {
 			if(mouseItem != null) {
 				inventory.add(mouseItem);
 			}
@@ -116,7 +111,15 @@ public class InventoryMenu extends Menu {
 		inventory.renderGrid(screen, 60, 22);
 		if(mouseItem != null) {
 			mouseItem.render(screen, mouse.getxPos() - 8, mouse.getyPos() - 8);
-			Font.render(mouseItem.getName(), screen, mouse.getxPos() - (mouseItem.getName().length() * 5), mouse.getyPos() - 20);
+			String name = "";
+			if(mouseItem instanceof ResourceItem) {
+				name = ((ResourceItem)mouseItem).getResource().getName();
+			} else {
+				name = mouseItem.getName();
+			}
+			Font.render(name, screen, mouse.getxPos() - (name.length() * 5), mouse.getyPos() - 20);
 		}
+		
+		super.render(screen);
 	}
 }

@@ -27,6 +27,7 @@ public class Item {
 	}
 	
 	public void onPickUp(Player p, Level l) {
+		p.inventory.add(this);
 	}
 
 	public void render(Bitmap b, int xx, int yy) {

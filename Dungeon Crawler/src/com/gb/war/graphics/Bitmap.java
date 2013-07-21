@@ -115,6 +115,33 @@ public abstract class Bitmap {
 		}
 	}
 	
+	public void renderColorFont(Image i, int xp, int yp, int tileId, int tileWidth, int color) {
+		xp -= xOff;
+		yp -= yOff;
+		
+		int tw = i.getWidth() / tileWidth;
+		int xt = tileId % tw;
+		int yt = tileId / tw;
+		int tileOffset = xt * tileWidth + yt * tileWidth * i.width;
+		
+		for (int y = 0; y < tileWidth; y++) {
+			if ((y + yp) < 0 || (y + yp) >= height)
+				continue;
+			for(int x = 0; x < tileWidth; x++) {
+				if ((x + xp) < 0 || (x + xp) >= width)
+					continue;
+				
+				int c = i.pixels[x + (y * i.width) + tileOffset];
+				if(c == 0xffffff) {
+					c = color;
+				}
+				if(c == 0x7f007f)
+					continue;
+				pixels[(x + xp) + (y + yp) * width] = c;
+			}
+		}
+	}
+	
 	public void renderCircle(int x, int y, int r, int c) {
 		renderCircle(x, y, r, c, true);
 	}

@@ -13,6 +13,7 @@ public class FireBurstEntity extends Entity {
 	
 	public FireBurstEntity(int x, int y, Level l) {
 		super(x, y, l, "ENTITY_FIREBURST");
+		setKindness(EntityKindness.PASSIVE);
 	}
 
 	public void tick() {

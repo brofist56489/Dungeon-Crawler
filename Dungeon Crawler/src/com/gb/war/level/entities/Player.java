@@ -1,5 +1,7 @@
 package com.gb.war.level.entities;
 
+import java.awt.event.KeyEvent;
+
 import com.gb.war.Game;
 import com.gb.war.graphics.Bitmap;
 import com.gb.war.graphics.ImageManager;
@@ -26,8 +28,10 @@ public class Player extends Mob {
 		super(x, y, l, "ENTITY_PLAYER");
 		key = k;
 		mouse = m;
-		w = 16;
-		h = 16;
+		w = 14;
+		h = 14;
+		xo = 2;
+		yo = 2;
 		
 		ANIMATION_FRAME_MAX = 2;
 		ANIMATION_DELAY_MAX = 10;
@@ -44,6 +48,8 @@ public class Player extends Mob {
 		inventory.add(new IceWandItem(5));
 		inventory.add(new BowItem(5));
 		inventory.add(new CrossbowItem(5));
+		
+		setKindness(EntityKindness.FRIENDLY);
 	}
 	
 	public void tick() {
@@ -59,23 +65,23 @@ public class Player extends Mob {
 		
 		if(Game.instance.menu != null) return;
 		
-		if(key.right.isPressed()) {
+		if(key.isKeyDown(KeyEvent.VK_D)) {
 			dir = 2;
 			ax += 2;
 		}
-		if(key.left.isPressed()) {
+		if(key.isKeyDown(KeyEvent.VK_A)) {
 			dir = 3;
 			ax -= 2;
 		}
-		if(key.up.isPressed()) {
+		if(key.isKeyDown(KeyEvent.VK_W)) {
 			dir = 0;
 			ay -= 2;
 		}
-		if(key.down.isPressed()) {
+		if(key.isKeyDown(KeyEvent.VK_S)) {
 			dir = 1;
 			ay += 2;
 		}
-		if(key.sprint.isPressed() && stamina > 0) {
+		if(key.isKeyDown(KeyEvent.VK_SHIFT) && stamina > 0) {
 			ax *= 2;
 			ay *= 2;
 			if(ax != 0 || ay != 0)
@@ -93,70 +99,21 @@ public class Player extends Mob {
 			int mx = mouse.getxPos() >> 4;
 			int my = mouse.getyPos() >> 4;
 			if(mx >= 0 && my >= 0)
-				if (!level.getTile(mx, my).interact(this, level, mx, my))
+				if (!level.getTile(mx, my).interact(mouse, this, level, mx, my))
 					if(inventory.getItem(0, 0) != null)
 						inventory.getItem(0, 0).onRightClick(mouse, level, this);
 		}
 	}
 	
 	public void render(Bitmap b) {
-		int xx = (int)x;
-		int yy = (int)y;
 		if(dir == 0) {
-			if(animation_frame == 0) {
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy, 3, 8, 1);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy, 2, 8, 1);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy + 8, 11, 8, 1);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy + 8, 10, 8, 1);
-			} else {
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy, 2, 8);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy, 3, 8);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy + 8, 10, 8);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy + 8, 11, 8);
-			}
-			return;
-		}
-		if(dir == 1) {
-			if(animation_frame == 0) {
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy, 1, 8, 1);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy, 0, 8, 1);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy + 8, 9, 8, 1);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy + 8, 8, 8, 1);
-			} else {
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy, 0, 8);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy, 1, 8);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy + 8, 8, 8);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy + 8, 9, 8);
-			}
-			return;
-		}
-		if(dir == 2) {
-			if(animation_frame == 0) {
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy, 4, 8);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy, 5, 8);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy + 8, 12, 8);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy + 8, 13, 8);
-			} else {
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy, 6, 8);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy, 7, 8);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy + 8, 14, 8);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy + 8, 15, 8);
-			}
-			return;
-		}
-		if(dir == 3) {
-			if(animation_frame == 0) {
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy, 5, 8, 1);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy, 4, 8, 1);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy + 8, 13, 8, 1);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy + 8, 12, 8, 1);
-			} else {
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy, 7, 8, 1);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy, 6, 8, 1);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx, yy + 8, 15, 8, 1);
-				ImageManager.renderFromImage("ENTITY_PLAYER", b, xx + 8, yy + 8, 14, 8, 1);
-			}
-			return;
+			ImageManager.renderFromImage(entityType, b, (int)x, (int)y, 1, 16, ((animation_frame == 0) ? 1 : 0));
+		} else if (dir == 1) {
+			ImageManager.renderFromImage(entityType, b, (int)x, (int)y, 0, 16, ((animation_frame == 0) ? 1 : 0));
+		} else if (dir == 2) {
+			ImageManager.renderFromImage(entityType, b, (int)x, (int)y, 2 + ((animation_frame == 0) ? 1 : 0), 16);
+		} else if (dir == 3) {
+			ImageManager.renderFromImage(entityType, b, (int)x, (int)y, 2 + ((animation_frame == 0) ? 1 : 0), 16, 1);
 		}
 	}
 }

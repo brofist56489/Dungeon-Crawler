@@ -10,12 +10,15 @@ public class Sheep extends Mob {
 
 	public Sheep(int x, int y, Level l) {
 		super(x, y, l, "ENTITY_SHEEP");
+		kindness = EntityKindness.PASSIVE;
 		
 		w = 16;
 		h = 16;
 		
 		ANIMATION_DELAY_MAX = 10;
 		ANIMATION_FRAME_MAX = 2;
+		setKindness(EntityKindness.PASSIVE);
+		setHealth(100);
 	}
 	
 	public void tick() {
@@ -23,7 +26,7 @@ public class Sheep extends Mob {
 		if(r.nextInt(100) == 0)
 			dir = r.nextInt(4);
 		updateDir(1);
-		super.move();
+		super.tick();
 	}
 	
 	public void render(Bitmap b) {

@@ -12,6 +12,9 @@ public class DungeonBackTile extends Tile {
 	
 	public void render(Bitmap screen, Level level, int x, int y) {
 		int sub = level.getSubTexture(x>>4, y>>4);
+		if(sub >= 4) {
+			sub = 0;
+		}
 		int xx = tileId;
 		int yy = sub * 16;
 		ImageManager.renderFromImage("tileMap", screen, x, y, xx+yy, 16);

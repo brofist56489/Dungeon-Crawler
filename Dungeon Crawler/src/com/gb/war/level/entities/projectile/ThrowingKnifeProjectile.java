@@ -4,6 +4,7 @@ package com.gb.war.level.entities.projectile;
 import com.gb.war.graphics.Bitmap;
 import com.gb.war.graphics.ImageManager;
 import com.gb.war.level.Level;
+import com.gb.war.level.entities.EntityKindness;
 
 public class ThrowingKnifeProjectile extends Projectile {
 
@@ -16,6 +17,7 @@ public class ThrowingKnifeProjectile extends Projectile {
 		w = 15;
 		h = 4;
 		rad = 0;
+		setKindness(EntityKindness.FRIENDLY);
 	}
 	
 	public void tick() {

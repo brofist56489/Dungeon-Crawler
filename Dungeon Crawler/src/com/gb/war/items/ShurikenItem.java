@@ -2,6 +2,7 @@ package com.gb.war.items;
 
 import com.gb.war.input.MouseHandler;
 import com.gb.war.level.Level;
+import com.gb.war.level.entities.Entity;
 import com.gb.war.level.entities.Player;
 import com.gb.war.level.entities.RagingNinjaEntity;
 import com.gb.war.level.entities.projectile.ShurikenProjectile;
@@ -33,6 +34,7 @@ public class ShurikenItem extends ToolItem {
 	public void onRightClick(MouseHandler m, Level l, Player p) {
 		if(!m.isRightClickedButton() || p.getStamina() <= 50) return;
 		if(level < MAX_LEVEL) return;
+		if(!Entity.safeSpawn(m.getxPos() / 16, m.getyPos() / 16, l)) return;
 		RagingNinjaEntity f = new RagingNinjaEntity((int)m.getxPos(), (int)m.getyPos(), l);
 		l.addEntity(f);
 		p.setStamina(-50);

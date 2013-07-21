@@ -5,6 +5,7 @@ import java.util.Random;
 import com.gb.war.graphics.Bitmap;
 import com.gb.war.graphics.ImageManager;
 import com.gb.war.level.Level;
+import com.gb.war.level.entities.EntityKindness;
 
 public class LightningProjectile extends Projectile {
 
@@ -12,6 +13,7 @@ public class LightningProjectile extends Projectile {
 
 	public LightningProjectile(int x, int y, float ax, float ay, Level l) {
 		super(x, y, ax, ay, l, "PROJECTILE_LIGHTNING");
+		setKindness(EntityKindness.FRIENDLY);
 		xo = 4;
 		yo = 1;
 		w = 15;

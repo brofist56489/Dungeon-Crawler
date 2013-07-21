@@ -16,6 +16,8 @@ public class Penguin extends Mob {
 		
 		ANIMATION_DELAY_MAX = 10;
 		ANIMATION_FRAME_MAX = 2;
+		setKindness(EntityKindness.PASSIVE);
+		setHealth(100);
 	}
 	
 	public void tick() {
@@ -23,7 +25,7 @@ public class Penguin extends Mob {
 		if(r.nextInt(100) == 0)
 			dir = r.nextInt(4);
 		updateDir(1);
-		super.move();
+		super.tick();
 	}
 	
 	public void render(Bitmap b) {

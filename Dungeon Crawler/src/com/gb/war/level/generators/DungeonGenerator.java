@@ -65,15 +65,14 @@ public class DungeonGenerator extends LevelGenerator {
 			yp = h / 2;
 			break;
 		}
-		for (int i = 0; i < 3; i++) {
-			if (side % 2 == 0) {
-				level.setTile(xp + x + 1 - i, yp + y, Tile.DUNGEON_BACK);
-				level.setSubTexture(xp + x + 1 - i, yp + y, 1);
-			} else {
-				level.setTile(xp + x, yp + y + 1 - i, Tile.DUNGEON_BACK);
-				level.setSubTexture(xp + x, yp + y + 1 - i, 1);
-			}
-		}
+		level.setTile(xp + x, yp + y, Tile.DOOR);
+		level.setSubTexture(xp + x, yp + y, Tile.DUNGEON_BACK.getId());
+		level.setData(xp + x, yp + y, side);
+//		if (side % 2 == 0) {
+//			level.setData(xp + x, yp + y, 0);
+//		} else {
+//			level.setData(xp + x, yp + y, 2);
+//		}
 	}
 
 	private void generateChests() {

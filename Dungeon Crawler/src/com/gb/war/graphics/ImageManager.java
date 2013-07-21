@@ -6,6 +6,9 @@ public class ImageManager {
 	private static HashMap<String, Image> images = new HashMap<String, Image>();
 	
 	public static void loadImage(String path, String name) {
+		if(images.get(name) != null) {
+			return;
+		}
 		Image i = new Image(path, name);
 		images.put(name, i);
 	}
@@ -13,6 +16,10 @@ public class ImageManager {
 	public static void unloadImage(String name) {
 		images.remove(name);
 		return;
+	}
+	
+	public static Image getImage(String name) {
+		return images.get(name);
 	}
 	
 	public static void setColorKey(String name, int c1, int c2, int c3, int c4) {

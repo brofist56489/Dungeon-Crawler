@@ -4,6 +4,7 @@ package com.gb.war.level.entities.projectile;
 import com.gb.war.graphics.Bitmap;
 import com.gb.war.graphics.ImageManager;
 import com.gb.war.level.Level;
+import com.gb.war.level.entities.EntityKindness;
 
 public class ShurikenProjectile extends Projectile {
 
@@ -11,6 +12,7 @@ public class ShurikenProjectile extends Projectile {
 	
 	public ShurikenProjectile(int x, int y, float ax, float ay, Level l) {
 		super(x, y, ax, ay, l, "PROJECTILE_SHURIKEN");
+		setKindness(EntityKindness.FRIENDLY);
 		xo = 2;
 		yo = 3;
 		w = 11;

@@ -14,6 +14,7 @@ public class Mob extends Entity {
 	public void tick() {
 		if(ax!=0 || ay!=0)
 			move();
+		super.tick();
 	}
 	
 	protected boolean move() {
@@ -51,8 +52,7 @@ public class Mob extends Entity {
 				
 				Tile t = level.getTile(sx, sy);
 				if(!t.isSolid()) continue;
-				Rectangle trect = new Rectangle(sx << 4, sy << 4, 16, 16);
-				if(srect.intersects(trect)) return true;
+				if(srect.intersects(t.getCollBox(sx, sy, level))) return true;
 			}
 		}
 		

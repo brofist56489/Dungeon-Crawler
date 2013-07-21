@@ -2,8 +2,7 @@ package com.gb.war.input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import com.gb.war.Game;
 
@@ -12,16 +11,20 @@ public class KeyHandler implements KeyListener {
 		private boolean pressed;
 		private boolean clicked;
 		private int absorbs, presses;
+		private int code;
+		private String rep;
 		
-		public Key() {
-			keys.add(this);
+		public Key(int code, String val) {
+			keys.put(code, this);
+			this.code = code;
+			this.rep = val;
 		}
 		
 		public void toggle(boolean press) {
 			if (pressed != press) {
 				pressed = press;
 				if (press) {
-					presses++;
+					presses+=2;
 				}
 			}
 		}
@@ -45,50 +48,49 @@ public class KeyHandler implements KeyListener {
 		public boolean isClicked() {
 			return clicked;
 		}
+
+		public int getCode() {
+			return code;
+		}
+
+		public String getRep() {
+			return rep;
+		}
 	}
 	
 	public KeyHandler(Game game) {
 		game.addKeyListener(this);
+		for(int i = 0; i < 512; i++) {
+			new Key(i, KeyEvent.getKeyText(i));
+		}
 	}
 	
 	public void tick() {
-		for (Key k : keys) {
+		for (Key k : keys.values()) {
 			k.tick();
 		}
 	}
 	
-	public List<Key> keys = new ArrayList<Key>();
-	
-	public Key up = new Key();
-	public Key down = new Key();
-	public Key left = new Key();
-	public Key right = new Key();
-	public Key sprint = new Key();
-	public Key inventory = new Key();
+	public HashMap<Integer, Key> keys = new HashMap<Integer, Key>();
 
-	public void toggle(int e, boolean press) {
-		if (e == KeyEvent.VK_UP || e == KeyEvent.VK_W) {
-			up.toggle(press);
+	public Key toggle(int e, boolean press) {
+		for(Key k : keys.values()) {
+			if(k.getCode() == e) {
+				k.toggle(press);
+				return k;
+			}
 		}
-		if (e == KeyEvent.VK_DOWN || e == KeyEvent.VK_S) {
-			down.toggle(press);
-		}
-		if (e == KeyEvent.VK_LEFT || e == KeyEvent.VK_A) {
-			left.toggle(press);
-		}
-		if (e == KeyEvent.VK_RIGHT || e == KeyEvent.VK_D) {
-			right.toggle(press);
-		}
-		if (e == KeyEvent.VK_SHIFT) {
-			sprint.toggle(press);
-		}
-		if (e == KeyEvent.VK_E) {
-			inventory.toggle(press);
-		}
+		
+		return null;
 	}
 	
 	public void keyPressed(KeyEvent e) {
-		toggle(e.getKeyCode(), true);
+		Key k = toggle(e.getKeyCode(), true);
+		tick();
+		if(Game.instance.menu != null)
+			if(k != null && k.clicked) {
+				Game.instance.menu.onKey(k);
+			}
 	}
 
 	public void keyReleased(KeyEvent e) {
@@ -97,9 +99,17 @@ public class KeyHandler implements KeyListener {
 
 	public void keyTyped(KeyEvent e) {
 	}
+	
+	public boolean isKeyDown(int k) {
+		return keys.get(k).isPressed();
+	}
+	
+	public boolean isKeyPressed(int k) {
+		return keys.get(k).isClicked();
+	}
 
 	public void releaseAll() {
-		for(Key k : keys) {
+		for(Key k : keys.values()) {
 			k.toggle(false);
 		}
 	}

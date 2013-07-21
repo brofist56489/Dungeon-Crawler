@@ -14,8 +14,10 @@ import com.gb.war.items.InventoryManager;
 import com.gb.war.items.LightningWandItem;
 import com.gb.war.items.PenguinWandItem;
 import com.gb.war.items.PresentItem;
+import com.gb.war.items.SheepWandItem;
 import com.gb.war.items.ShurikenItem;
 import com.gb.war.items.SpearItem;
+import com.gb.war.level.entities.Cow;
 import com.gb.war.level.entities.Entity;
 import com.gb.war.level.entities.Penguin;
 import com.gb.war.level.entities.Sheep;
@@ -56,9 +58,14 @@ public class Level {
 		InventoryManager.addItem("CHEST_0_0", new ShurikenItem(3), 1);
 		InventoryManager.addItem("CHEST_0_0", new DungeonTeleporterItem(3));
 		InventoryManager.addItem("CHEST_0_0", new PenguinWandItem(3));
+		InventoryManager.addItem("CHEST_0_0", new SheepWandItem(3));
 		
 		addEntity(new Penguin(96, 96, this));
 		addEntity(new Sheep(96, 256, this));
+		addEntity(new Cow(96, 115, this));
+		
+		tiles[3 + 5 * width] = Tile.DOOR.getId();
+		subTexture[3 + 5 * width] = Tile.DUNGEON_BACK.getId();
 	}
 	
 	public void generateChest(int x, int y) {
@@ -175,5 +182,9 @@ public class Level {
 
 	public void setHeight(int height) {
 		this.height = height;
+	}
+
+	public List<Entity> getEntities() {
+		return entities;
 	}
 }

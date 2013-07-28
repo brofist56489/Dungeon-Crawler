@@ -1,5 +1,6 @@
 package com.gb.war.items;
 
+import com.gb.war.Sound;
 import com.gb.war.input.MouseHandler;
 import com.gb.war.level.Level;
 import com.gb.war.level.entities.Entity;
@@ -18,6 +19,7 @@ public class FireWandItem extends ToolItem {
 	public void onLeftClick(MouseHandler m, Level l, Player p) {
 		if (!m.isLeftClickedButton() || p.getMana() <= 4)
 			return;
+		Sound.use.play();
 		float cx = p.getX() + p.getW() / 2;
 		float cy = p.getY() + p.getH() / 2;
 		double a = Math.atan2(m.getyPos() - cy, m.getxPos() - cx);

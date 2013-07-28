@@ -13,6 +13,13 @@ public class EarthProjectile extends Projectile {
 		h = 5;
 	}
 	
+	public void tick() {
+		if(super.move()) {
+			alive = false;
+		}
+		super.tick();
+	}
+	
 	public void preRender(Bitmap b) {
 		b.addLightSource((int)x, (int)y, 20, 50);
 	}

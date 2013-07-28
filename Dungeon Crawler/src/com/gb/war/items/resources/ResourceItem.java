@@ -42,7 +42,10 @@ public class ResourceItem extends Item {
 	}
 
 	public void setCount(int count) {
-		this.count = count;
+		this.count += count;
+		if(this.count < 0) {
+			this.count = 0;
+		}
 	}
 
 	public Resource getResource() {

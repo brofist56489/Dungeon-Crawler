@@ -26,6 +26,7 @@ public abstract class Entity {
 		ImageManager.loadImage("/textures/projectiles/throwingknifeprojectile.png", "PROJECTILE_THROWING_KNIFE");
 		ImageManager.loadImage("/textures/projectiles/shurikenprojectile.png", "PROJECTILE_SHURIKEN");
 		ImageManager.loadImage("/textures/projectiles/earthprojectile.png", "PROJECTILE_EARTH");
+		ImageManager.loadImage("/textures/projectiles/rockprojectile.png", "PROJECTILE_ROCK");
 //		ImageManager.loadImage("/textures/penguinprojectile.png", "PROJECTILE_PENGUIN");
 	}
 	

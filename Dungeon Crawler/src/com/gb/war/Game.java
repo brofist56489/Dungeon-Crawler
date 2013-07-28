@@ -62,7 +62,7 @@ public class Game extends Canvas implements Runnable {
 	public Player player;
 
 	private void init() {
-		// Sound.calm.play();
+//		Sound.calm.play();
 		Tile.init();
 		Entity.init();
 		Item.init();
@@ -101,7 +101,7 @@ public class Game extends Canvas implements Runnable {
 			long now = System.nanoTime();
 			d += (now - lt) / nsPt;
 			lt = now;
-			shouldRender = true;
+			shouldRender = false;
 
 			while (d >= 1) {
 				tick();

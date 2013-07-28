@@ -67,7 +67,7 @@ public class DungeonGenerator extends LevelGenerator {
 		}
 		level.setTile(xp + x, yp + y, Tile.DOOR);
 		level.setSubTexture(xp + x, yp + y, Tile.DUNGEON_BACK.getId());
-		level.setData(xp + x, yp + y, side);
+		level.setData(xp + x, yp + y, 3 - side);
 //		if (side % 2 == 0) {
 //			level.setData(xp + x, yp + y, 0);
 //		} else {
@@ -77,7 +77,7 @@ public class DungeonGenerator extends LevelGenerator {
 
 	private void generateChests() {
 		Random rand = new Random();
-		Point[] chests = new Point[rand.nextInt(10) + 1];
+		Point[] chests = new Point[rand.nextInt(5) + 1];
 		for (int i = 0; i < chests.length; i++) {
 			boolean a = rand.nextBoolean();
 			chests[i] = new Point();

@@ -15,6 +15,8 @@ import com.gb.war.items.Inventory;
 import com.gb.war.items.LightningWandItem;
 import com.gb.war.items.SpearItem;
 import com.gb.war.items.ThrowingKnifeItem;
+import com.gb.war.items.resources.Resource;
+import com.gb.war.items.resources.ResourceItem;
 import com.gb.war.level.Level;
 
 public class Player extends Mob {
@@ -48,6 +50,10 @@ public class Player extends Mob {
 		inventory.add(new IceWandItem(5));
 		inventory.add(new BowItem(5));
 		inventory.add(new CrossbowItem(5));
+		inventory.add(new ResourceItem(Resource.health_potion, 5));
+		
+		inventory.add(new ResourceItem(Resource.arrow, 67));
+		inventory.add(new ResourceItem(Resource.rock, 10));
 		
 		setKindness(EntityKindness.FRIENDLY);
 	}

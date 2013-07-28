@@ -20,6 +20,13 @@ public class LightningProjectile extends Projectile {
 		h = 11;
 		rand = new Random();
 	}
+	
+	public void tick() {
+		if(super.move()) {
+			alive = false;
+		}
+		super.tick();
+	}
 
 	public void preRender(Bitmap b) {
 		b.addLightSource((int) x, (int) y, 20, 50);

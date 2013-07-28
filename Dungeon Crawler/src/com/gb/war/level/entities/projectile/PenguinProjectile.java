@@ -18,7 +18,6 @@ public class PenguinProjectile extends Projectile {
 	
 	public void tick() {
 		super.tick();
-		
 	}
 	
 	public void preRender(Bitmap b) {

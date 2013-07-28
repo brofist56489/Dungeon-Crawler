@@ -66,7 +66,7 @@ public class InventoryMenu extends Menu {
 			yy -= 22;
 			int xt = xx / 28;
 			int yt = yy / 26;
-			if(xt > inventory.getW() || yt > inventory.getW() || yt < 0 || xt < 0) return;
+			if(xt >= inventory.getW() || yt >= inventory.getW() || yt < 0 || xt < 0) return;
 			if(mouseItem == null) {
 				mouseItem = inventory.getItem(xt, yt);
 				inventory.removeItem(xt, yt);

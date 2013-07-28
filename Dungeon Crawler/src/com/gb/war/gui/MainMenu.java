@@ -12,7 +12,7 @@ public class MainMenu extends Menu {
 
 	public MainMenu(Game game, Level level) {
 		super(game, level);
-		ImageManager.loadImage("/textures/menu/main/logo.png", "MENU_MAIN_TITLE");
+		ImageManager.loadImage("/textures/menu/main/logo1.png", "MENU_MAIN_TITLE");
 	}
 	
 	public void init() {

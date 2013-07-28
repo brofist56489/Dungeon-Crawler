@@ -14,4 +14,11 @@ public class SpearProjectile extends Projectile {
 		w = 14;
 		h = 5;
 	}
+	
+	public void tick() {
+		if(super.move()) {
+			alive = false;
+		}
+		super.tick();
+	}
 }

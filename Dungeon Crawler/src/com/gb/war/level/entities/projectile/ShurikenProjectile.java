@@ -21,6 +21,9 @@ public class ShurikenProjectile extends Projectile {
 	}
 	
 	public void tick() {
+		if(super.move()) {
+			alive = false;
+		}
 		super.tick();
 		rad -= Math.PI / 8;
 		if(rad < 0) {

@@ -16,6 +16,7 @@ import com.gb.war.items.PenguinWandItem;
 import com.gb.war.items.PresentItem;
 import com.gb.war.items.SheepWandItem;
 import com.gb.war.items.ShurikenItem;
+import com.gb.war.items.SlingItem;
 import com.gb.war.items.SpearItem;
 import com.gb.war.level.entities.Cow;
 import com.gb.war.level.entities.Entity;
@@ -59,6 +60,7 @@ public class Level {
 		InventoryManager.addItem("CHEST_0_0", new DungeonTeleporterItem(3));
 		InventoryManager.addItem("CHEST_0_0", new PenguinWandItem(3));
 		InventoryManager.addItem("CHEST_0_0", new SheepWandItem(3));
+		InventoryManager.addItem("CHEST_0_0", new SlingItem(3));
 		
 		addEntity(new Penguin(96, 96, this));
 		addEntity(new Sheep(96, 256, this));

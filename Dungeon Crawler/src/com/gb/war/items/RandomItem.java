@@ -7,7 +7,7 @@ public class RandomItem {
 	public static Item genRanItem() {
 		
 		Random rand = new Random();
-		int chance = rand.nextInt(13);
+		int chance = rand.nextInt(14);
 		//Bow
 			if(chance == 0)
 				return new BowItem(rand.nextInt(5) + 1);
@@ -43,6 +43,8 @@ public class RandomItem {
 				return new EarthWandItem(rand.nextInt(5) + 1);
 			if(chance == 12)
 				return new CowWandItem(rand.nextInt(5) + 1);
+			if(chance == 13)
+				return new SlingItem(rand.nextInt(5) + 1);
 			return null;
 	}
 }

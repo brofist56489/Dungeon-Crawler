@@ -40,11 +40,8 @@ public abstract class Projectile extends Mob {
 	
 	public void tick() {
 		tickLife();
-		if(super.move()) {
-			alive = false;
-		}
 		for(Entity e : level.getEntities()) {
-			if (e.getRect().intersects(getRect()) && e.getKindness() != getKindness()) {
+			if (e.getRect().intersects(getRect()) && e.getKindness() != getKindness() && !(e instanceof Projectile)) {
 				e.setHealth(-damage);
 				alive = false;
 				DamageIndicator i = new DamageIndicator((int)e.getX(), (int)e.getY() - 12, level, "" + damage);

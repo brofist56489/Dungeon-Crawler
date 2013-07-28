@@ -2,6 +2,7 @@ package com.gb.war.items;
 
 import com.gb.war.graphics.Bitmap;
 import com.gb.war.graphics.ImageManager;
+import com.gb.war.items.resources.Resource;
 import com.gb.war.items.resources.ResourceItem;
 
 public class Inventory {
@@ -15,6 +16,30 @@ public class Inventory {
 		height = maxItems / w;
 		this.maxItems = maxItems;
 		items = new Item[maxItems];
+	}
+	
+	public boolean contains(Resource r) {
+		boolean success = false;
+		for(int i = 0; i < maxItems; i++) {
+			if(items[i] != null && items[i] instanceof ResourceItem) {
+				if(((ResourceItem)items[i]).getResource() == r) {
+					success = true;
+				}
+			}
+		}
+		return success;
+	}
+	
+	public void removeResource(Resource r, int count) {
+		for(int i = 0; i < maxItems; i++) {
+			if(items[i] != null && items[i] instanceof ResourceItem) {
+				if(((ResourceItem)items[i]).getResource() != r) continue;
+				((ResourceItem)items[i]).setCount(-count);
+				if(((ResourceItem)items[i]).getCount() == 0) {
+					removeItem(i);
+				}
+			}
+		}
 	}
 	
 	public void add(Item i) {
@@ -42,7 +67,11 @@ public class Inventory {
 	}
 	
 	public void removeItem(int x, int y) {
-		items[x + y * width] = null;
+		removeItem(x + y * width);
+	}
+	
+	public void removeItem(int index) {
+		items[index] = null;
 	}
 	
 	public void renderGrid(Bitmap b, int xp, int yp) {

@@ -21,6 +21,7 @@ import com.gb.war.items.SpearItem;
 import com.gb.war.level.entities.Cow;
 import com.gb.war.level.entities.Entity;
 import com.gb.war.level.entities.Penguin;
+import com.gb.war.level.entities.Player;
 import com.gb.war.level.entities.Sheep;
 import com.gb.war.level.generators.DungeonGenerator;
 import com.gb.war.level.tiles.Tile;
@@ -33,6 +34,8 @@ public class Level {
 	private int[] subTexture;
 	
 	private List<Entity> entities = new ArrayList<Entity>();
+	
+	private Player player;
 	
 	public Level(int w, int h) {
 		width = w;
@@ -106,6 +109,10 @@ public class Level {
 	}
 	
 	public void addEntity(Entity e) {
+		if(e instanceof Player) {
+			this.player = (Player)e;
+			return;
+		}
 		entities.add(e);
 	}
 	
@@ -114,17 +121,18 @@ public class Level {
 	}
 	
 	public void tick() {
+		player.tick();
 		for(int i = 0; i < entities.size(); i++) {
 			entities.get(i).tick();
 			if(!entities.get(i).alive) {
 				entities.remove(i);
 				i--;
 			}
-			
 		}
 	}
 	
 	public void preRender(Bitmap b) {
+		player.preRender(b);
 		for(int i = 0; i < entities.size(); i++) {
 			entities.get(i).preRender(b);
 		}
@@ -168,6 +176,7 @@ public class Level {
 		for(int i = 0; i < entities.size(); i++) {
 			entities.get(i).render(b);
 		}
+		player.render(b);
 	}
 
 	public int getWidth() {
@@ -188,5 +197,9 @@ public class Level {
 
 	public List<Entity> getEntities() {
 		return entities;
+	}
+	
+	public Player getPlayer() {
+		return player;
 	}
 }

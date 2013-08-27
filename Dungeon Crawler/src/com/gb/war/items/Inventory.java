@@ -33,9 +33,10 @@ public class Inventory {
 	public void removeResource(Resource r, int count) {
 		for(int i = 0; i < maxItems; i++) {
 			if(items[i] != null && items[i] instanceof ResourceItem) {
-				if(((ResourceItem)items[i]).getResource() != r) continue;
-				((ResourceItem)items[i]).setCount(-count);
-				if(((ResourceItem)items[i]).getCount() == 0) {
+				ResourceItem res = (ResourceItem)items[i];
+				if(res.getResource() != r) continue;
+				res.setCount(-count);
+				if(res.getCount() == 0) {
 					removeItem(i);
 				}
 			}

@@ -4,7 +4,6 @@ import java.applet.Applet;
 import java.applet.AudioClip;
 
 public class Sound {
-//	public static final Sound Example = new Sound("/example.mid");
 	public static final Sound calm = new Sound("/sounds/ludumdare.mid");
 	public static final Sound use = new Sound("/sounds/use.wav");
 	public static final Sound silence = new Sound("/sounds/silence.wav");
